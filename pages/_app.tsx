@@ -33,7 +33,12 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Flowbite theme={{ theme }}>
         <Layout>
           <Component {...pageProps} />
-          <Toaster position="top-right" />
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 4000,
+            }}
+          />
         </Layout>
       </Flowbite>
     </Suspense>
