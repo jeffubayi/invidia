@@ -32,7 +32,9 @@ const Story = () => {
               body: JSON.stringify({ values }),
             }).then(() => {
               router.push(`/story`);
-              toast.success("Story Added successfully");
+              toast.success("Story added successfully", {
+                icon: "📒📖",
+              });
             });
           } catch (err) {
             console.log(err);

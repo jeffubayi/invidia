@@ -7,4 +7,5 @@ export interface StoryProps {
   label: string;
   id: number| string;
   content: string;
+  created_at?:number;
 }

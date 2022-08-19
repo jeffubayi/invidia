@@ -4,15 +4,16 @@ import useSWR from "swr";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { Button, Spinner } from "flowbite-react";
+import { supabase } from "../../utils/supabaseClient";
 
-const Story = () => {
+const Story = ({ data }: { data: StoryProps[] }) => {
   const router = useRouter();
   const { data, error } = useSWR("/api/stories", fetcher);
   if (error) return toast.error("Error fetching");
   if (!data)
     return (
       <div className="flex items-center justify-center">
-        <Spinner color="info"/>
+        <Spinner color="info" />
         Loading stories..
       </div>
     );
@@ -26,7 +27,7 @@ const Story = () => {
         <Button onClick={() => router.push(`story/create`)}>Create</Button>
       </div>
       <div className="flex flex-wrap -mx-1 lg:-mx-4">
-        {data.data?.map(({ label, id, content }: StoryProps) => (
+        {data?.data?.map(({ label, id, content }: StoryProps) => (
           <StoryCard key={id} id={id} label={label} content={content} />
         ))}
       </div>
@@ -35,3 +36,5 @@ const Story = () => {
 };
 
 export default Story;
+
+
