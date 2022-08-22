@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "../utils/supabaseClient";
 import { getToday } from "../utils";
 import { Session } from "@supabase/gotrue-js/src/lib/types";
-import { Badge, Tabs } from "flowbite-react";
+import { Badge, Button, Label, Modal, Tabs, TextInput } from "flowbite-react";
 import {
   HiOutlineSortDescending,
   HiOutlineClipboardCheck,
@@ -19,7 +19,6 @@ import Profile from "../components/profile";
 import Latest from "../components/list-card";
 
 const Index = ({ data, error }: { data: StoryProps[]; error: any }) => {
-  const router = useRouter();
   const [session, setSession] = useState<Session | null>();
   useEffect(() => {
     setSession(supabase.auth.session());
@@ -49,7 +48,7 @@ const Index = ({ data, error }: { data: StoryProps[]; error: any }) => {
                     <Tabs.Item
                       active={true}
                       icon={HiOutlineTable}
-                      title="All projects"
+                      title="Pinned"
                     >
                       {data ? (
                         data?.map(

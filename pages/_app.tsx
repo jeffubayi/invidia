@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <Suspense
       fallback={
         <div className="flex items-center justify-center">
-          <Spinner size="lg" /> Loading Invidia
+          <Spinner size="lg" /> Loading...
         </div>
       }
     >

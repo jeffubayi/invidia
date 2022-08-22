@@ -1,12 +1,14 @@
-import StoryCard from "../../components/story-card";
-import { StoryProps, fetcher } from "../../utils";
+
+
+import React from "react";
 import useSWR from "swr";
 import toast from "react-hot-toast";
 import { Button, Spinner, Modal, Label, TextInput } from "flowbite-react";
-import React from "react";
 import { Formik } from "formik";
+import StoryCard from "../components/story-card";
+import { StoryProps, fetcher } from "../utils";
 
-const Story = () => {
+const Notes = () => {
   const [showModal, setShowModal] = React.useState(false);
   const { data, error } = useSWR("/api/stories", fetcher);
   if (error) return toast.error("Error fetching");
@@ -116,4 +118,4 @@ const Story = () => {
   );
 };
 
-export default Story;
+export default Notes;
