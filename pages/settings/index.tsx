@@ -20,7 +20,7 @@ const Settings = () => {
 
  const logout = () => {
     supabase.auth.signOut();
-    router.push(`/signin`);
+    router.push(`/`);
   };
 
   return (

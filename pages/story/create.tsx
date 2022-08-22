@@ -54,15 +54,15 @@ const Story = () => {
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <Card>
               <h2 className="inline-block align-baseline  text-2xl text-white-500 hover:text-white-800 mb-2 dark:text-white">
-                Create story
+                Create note
               </h2>
               <div className="mb-2 block">
-                <Label htmlFor="label" value="Story Label" />
+                <Label htmlFor="label" value="Note Label" />
               </div>
               <TextInput
                 id="label"
                 type="text"
-                placeholder="Add story label"
+                placeholder="Add note label"
                 required={true}
                 name="label"
                 onChange={handleChange}
@@ -73,7 +73,7 @@ const Story = () => {
                 {errors.label && touched.label && errors.label}
               </p>
               <div className="mb-2 block">
-                <Label htmlFor="content" value="Story Content" />
+                <Label htmlFor="content" value="Note Content" />
               </div>
               <TextInput
                 name="content"
