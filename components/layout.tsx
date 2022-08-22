@@ -1,6 +1,5 @@
 import Head from "next/head";
 import AppBar from "./appbar";
-import BottomNav from "./bottom-nav";
 import { useRouter } from "next/router";
 
 interface Props {
@@ -20,14 +19,12 @@ const Layout = ({ title, children }: Props) => {
           {router?.pathname.replace("/", "|")}
         </title>
       </Head>
-      <body className="dark:bg-gray-900">
-        {isLayoutRequired ? null : <AppBar />}
-        <main className=" mx-auto max-w-screen-md  pb-10 pb-2  ">
+      <div className=" bg-gray-200 dark:bg-gray-900 ">
+        <AppBar />
+        <main className=" mx-auto max-w-screen-xl  pb-10  ">
           <div className="p-6">{children}</div>
         </main>
-
-        {isLayoutRequired ? null : <BottomNav />}
-      </body>
+      </div>
     </>
   );
 };
