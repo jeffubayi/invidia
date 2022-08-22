@@ -55,7 +55,7 @@ const AppBar: FC<Record<string, never>> = function () {
 
   return (
     <Navbar fluid={true} rounded={true}>
-      <Navbar.Brand href="/">
+      <Navbar.Brand href="/dashboard">
         <img
           src="https://flowbite.com/docs/images/logo.svg"
           className="mr-3 h-6 sm:h-9"
@@ -101,7 +101,7 @@ const AppBar: FC<Record<string, never>> = function () {
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>
-        <Navbar.Link href="/" active={router.pathname === "/"}>
+        <Navbar.Link href="/dashboard" active={router.pathname === "/dashboard"}>
           Dashboard
         </Navbar.Link>
         <Navbar.Link href="/projects" active={router.pathname === "/projects"}>

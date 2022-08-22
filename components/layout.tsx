@@ -1,5 +1,6 @@
 import Head from "next/head";
 import AppBar from "./appbar";
+import LandingAppBar from "./bottom-nav";
 import { useRouter } from "next/router";
 
 interface Props {
@@ -10,17 +11,14 @@ interface Props {
 const Layout = ({ title, children }: Props) => {
   const router = useRouter();
   const isLayoutRequired =
-    typeof window !== "undefined" && router.pathname === "/signin";
+    typeof window !== "undefined" && router.pathname === "/";
   return (
     <>
       <Head>
-        <title className="p-1">
-          Invidia {}
-          {router?.pathname.replace("/", "|")}
-        </title>
+        <title className="p-1">{router?.pathname.slice(1)}</title>
       </Head>
       <body className=" bg-gray-200 dark:bg-gray-900 ">
-        <AppBar />
+        {isLayoutRequired ? <LandingAppBar /> : <AppBar />}
         <main className=" mx-auto max-w-screen-xl  pb-10  ">
           <div className="p-6">{children}</div>
         </main>
