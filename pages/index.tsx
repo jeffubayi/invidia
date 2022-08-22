@@ -1,14 +1,22 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../utils/supabaseClient";
+import { getToday } from "../utils";
 import { Session } from "@supabase/gotrue-js/src/lib/types";
-import { Button, Timeline, Spinner, Card } from "flowbite-react";
-import { HiArrowNarrowRight } from "react-icons/hi";
+import { Badge, Tabs } from "flowbite-react";
+import {
+  HiOutlineSortDescending,
+  HiOutlineClipboardCheck,
+  HiSparkles,
+  HiOutlineTable,
+} from "react-icons/hi";
 import { useRouter } from "next/router";
 import Signin from "./signin";
 import { StoryProps } from "../utils";
 import toast from "react-hot-toast";
 import StoryCard from "../components/story-list";
-import Wallet from "../components/wallet-card"
+import Skeleton from "../components/skeleton";
+import Profile from "../components/profile";
+import Latest from "../components/list-card";
 
 const Index = ({ data, error }: { data: StoryProps[]; error: any }) => {
   const router = useRouter();
@@ -22,63 +30,59 @@ const Index = ({ data, error }: { data: StoryProps[]; error: any }) => {
   }, []);
 
   if (error) return toast.error("Error fetching");
-  if (!data)
-    return (
-      <div className="flex items-center justify-center">
-        <Spinner color="info" />
-        Loading stories..
-      </div>
-    );
   return (
     <>
       <div className="container">
         {session ? (
           <>
-            <Timeline>
-              <Timeline.Item>
-                <Timeline.Point />
-                <Timeline.Content>
-                  <Timeline.Time>Today</Timeline.Time>
-                  <Timeline.Title>Welcome back</Timeline.Title>
-                  <Timeline.Body>
-                    Your email <b>{session?.user?.email} </b>has been verified
-                    successfully.
-                    <br /> You can now head over to finish up on setting your
-                    profile details
-                  </Timeline.Body>
-                  <Button color="gray" onClick={() => router.push("/settings")}>
-                    Profile settings
-                    <HiArrowNarrowRight className="ml-2 h-3 w-3" />
-                  </Button>
-                </Timeline.Content>
-              </Timeline.Item>
-            </Timeline>
             <div className="mb-4 flex items-center justify-between">
-            <div className="max-w-sm">
-              <Card>
-                <div className="mb-4 flex items-center justify-between">
-                  <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">
-                    Latest Stories
-                  </h5>
-                  <div
-                    onClick={() => router.push(`/story`)}
-                    className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
-                  >
-                    View all
-                  </div>
-                </div>
-                {data?.map(({ label, id, content, created_at }: StoryProps) => (
-                  <StoryCard
-                    key={id}
-                    id={id}
-                    label={label}
-                    content={content}
-                    created_at={created_at}
-                  />
-                ))}
-              </Card>
+              <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">
+                Dashboard
+              </h5>
+              <Badge color="gray">{getToday()}</Badge>
             </div>
-            <Wallet/>
+            <div className="grid grid-cols-5 gap-4">
+              <Profile />
+              <div className="col-span-3 ">
+                <div>
+                  <Tabs.Group aria-label="Default tabs" style="underline">
+                    <Tabs.Item
+                      active={true}
+                      icon={HiOutlineTable}
+                      title="All projects"
+                    >
+                      {data ? (
+                        data?.map(
+                          ({ label, id, content, created_at }: StoryProps) => (
+                            <Latest
+                              key={id}
+                              id={id}
+                              label={label}
+                              content={content}
+                              created_at={created_at}
+                            />
+                          )
+                        )
+                      ) : (
+                        <Skeleton />
+                      )}
+                    </Tabs.Item>
+                    <Tabs.Item
+                      title="Doing this week"
+                      icon={HiOutlineSortDescending}
+                    >
+                      <Skeleton />
+                    </Tabs.Item>
+                    <Tabs.Item title="Doing today" icon={HiSparkles}>
+                      <Skeleton />
+                    </Tabs.Item>
+                    <Tabs.Item title="Completed" icon={HiOutlineClipboardCheck}>
+                      <Skeleton />
+                    </Tabs.Item>
+                  </Tabs.Group>
+                </div>
+              </div>
+              <StoryCard />
             </div>
           </>
         ) : (
@@ -95,7 +99,7 @@ export async function getStaticProps() {
     .from("stories")
     .select("*")
     .order("created_at")
-    .limit(4);
+    .limit(5);
   return {
     props: {
       data,
