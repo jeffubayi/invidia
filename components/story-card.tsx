@@ -1,26 +1,13 @@
-import {
-  Button,
-  Card,
-  Checkbox,
-  Label,
-  Modal,
-  TextInput,
-} from "flowbite-react";
-import { useRouter } from "next/router";
-import { StoryProps,fetcher} from "../utils";
+import { Button, Card, Label, Modal, TextInput } from "flowbite-react";
+import { StoryProps } from "../utils";
 import { Formik } from "formik";
 import { supabase } from "../utils/supabaseClient";
-import useSWR from "swr";
 import toast from "react-hot-toast";
 import React from "react";
 
 const StoryCard = (stories: StoryProps) => {
   const { label, content, id } = stories;
   const [showModal, setShowModal] = React.useState(false);
-  const router = useRouter();
-  const { data, error } = useSWR(`/api/stories/${id}`, fetcher);
-  if (error) return <div>failed to load</div>;
-  if (!data) return <div>loading...</div>;
   return (
     <div className="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
       <div className="max-w-sm" onClick={() => setShowModal(true)}>
@@ -41,8 +28,8 @@ const StoryCard = (stories: StoryProps) => {
       >
         <Formik
           initialValues={{
-            label: data?.story?.label,
-            content: data?.story?.content,
+            label,
+            content,
             id,
           }}
           validate={(values) => {}}
@@ -59,7 +46,7 @@ const StoryCard = (stories: StoryProps) => {
                 ])
                 .match({ id: id })
                 .then(() => {
-                  router.push(`/story`);
+                  setShowModal(false);
                   toast.success(`Story ${id} Updated`);
                 });
             } catch (err) {
@@ -78,32 +65,53 @@ const StoryCard = (stories: StoryProps) => {
             <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
               <Modal.Header>View story</Modal.Header>
               <Modal.Body>
-              <div className="mb-2 block">
-                <Label htmlFor="email1" value="Story Label" />
-              </div>
-              <TextInput
-                name="label"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.label}id="label"
-                type="text"
-                placeholder="label"
-              />
-            <div className="mb-2 block">
-                <Label htmlFor="password1" value="Story Content" />
-              </div>
-              <TextInput
-                name="content"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.content}id="content"
-                type="text"
-                placeholder="Content"
-              />
+                <div className="mb-2 block">
+                  <Label htmlFor="email1" value="Story Label" />
+                </div>
+                <TextInput
+                  name="label"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.label}
+                  id="label"
+                  type="text"
+                  placeholder="label"
+                />
+                <div className="mb-2 block">
+                  <Label htmlFor="password1" value="Story Content" />
+                </div>
+                <TextInput
+                  name="content"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.content}
+                  id="content"
+                  type="text"
+                  placeholder="Content"
+                />
               </Modal.Body>
               <Modal.Footer>
-                <Button type="submit">Update</Button>
-                <Button color="failure" onClick={() => setShowModal(false)}>
+                <Button type="submit" disabled={isSubmitting}>
+                  Update
+                </Button>
+                <Button
+                  color="failure"
+                  onClick={async () => {
+                    try {
+                      await supabase
+                        .from("stories")
+                        .delete()
+                        .eq("id", id)
+                        .then(() => {
+                          setShowModal(false);
+                          toast.success(`Note ${label} deleted`);
+                        });
+                    } catch (err) {
+                      console.log(err);
+                      toast.error(`Error deleting ${label}`);
+                    }
+                  }}
+                >
                   Delete
                 </Button>
               </Modal.Footer>

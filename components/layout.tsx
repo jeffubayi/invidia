@@ -19,12 +19,12 @@ const Layout = ({ title, children }: Props) => {
           {router?.pathname.replace("/", "|")}
         </title>
       </Head>
-      <div className=" bg-gray-200 dark:bg-gray-900 ">
+      <body className=" bg-gray-200 dark:bg-gray-900 ">
         <AppBar />
         <main className=" mx-auto max-w-screen-xl  pb-10  ">
           <div className="p-6">{children}</div>
         </main>
-      </div>
+      </body>
     </>
   );
 };

@@ -1,10 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import {
-  DarkThemeToggle,
-  Navbar,
-  Avatar,
-  Dropdown
-} from "flowbite-react";
+import { DarkThemeToggle, Navbar, Avatar, Dropdown } from "flowbite-react";
 import { FC } from "react";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
@@ -94,10 +89,14 @@ const AppBar: FC<Record<string, never>> = function () {
             </span>
           </Dropdown.Header>
 
-          <Dropdown.Item onClick={()=>router.push(`/notifications`)}>Notifications</Dropdown.Item>
-          <Dropdown.Item onClick={()=>router.push(`/settings`)}>Settings</Dropdown.Item>
+          <Dropdown.Item onClick={() => router.push(`/notifications`)}>
+            Notifications
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => router.push(`/settings`)}>
+            Settings
+          </Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item onClick={logout}>Sign out</Dropdown.Item>
+          <Dropdown.Item onClick={logout}>Log out</Dropdown.Item>
         </Dropdown>
         <Navbar.Toggle />
       </div>
@@ -111,7 +110,7 @@ const AppBar: FC<Record<string, never>> = function () {
         <Navbar.Link href="/reports" active={router.pathname === "/reports"}>
           Reports
         </Navbar.Link>
-        <Navbar.Link href="/story" active={router.pathname === "/story"}>
+        <Navbar.Link href="/notes" active={router.pathname === "/notes"}>
           Notes
         </Navbar.Link>
       </Navbar.Collapse>
