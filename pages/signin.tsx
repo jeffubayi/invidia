@@ -31,7 +31,7 @@ const Signin = () => {
               <img
                 aria-hidden="true"
                 className="hidden object-cover w-full h-full dark:block"
-                src="https://flowbite.com/docs/images/blog/image-1.jpg"
+                src="https://assets-global.website-files.com/61a05ff14c09ecacc06eec05/61f5a0886a493ac4ff3aa69a_10_best_productivity_2.png"
                 alt="INVIDIA"
               />
             </div>
