@@ -1,16 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
-import { Card, Badge } from "flowbite-react";
-import { useRouter } from "next/router";
+import React from "react";
+import { Card, Badge, Modal, Button } from "flowbite-react";
 import { HiClock } from "react-icons/hi";
 import { StoryProps } from "../utils";
 
 const DashboardProjects = (stories: StoryProps) => {
   const { label, content, id, created_at } = stories;
-  const router = useRouter();
+  const [showModal, setShowModal] = React.useState(false);
 
   return (
     <div className="py-1">
-      <Card>
+      <Card onClick={() => setShowModal(true)}>
         <div className="flow-root">
           <ul className="divide-y divide-gray-200 dark:divide-gray-700">
             <li>
@@ -40,6 +40,29 @@ const DashboardProjects = (stories: StoryProps) => {
           </ul>
         </div>
       </Card>
+      <Modal show={showModal} size="5xl" onClose={() => setShowModal(false)}>
+        <Modal.Header>{`Project #${id} : ${label}`}</Modal.Header>
+        <Modal.Body>
+          <div className="space-y-6 p-6">
+            <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+              {content}
+            </p>
+            <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+              The European Union’s General Data Protection Regulation (G.D.P.R.)
+              goes into effect on May 25 and is meant to ensure a common set of
+              data rights in the European Union. It requires organizations to
+              notify users as soon as possible of high-risk data breaches that
+              could personally affect them.
+            </p>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={() => setShowModal(false)}>Update project</Button>
+          <Button color="gray" onClick={() => setShowModal(false)}>
+            Decline
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

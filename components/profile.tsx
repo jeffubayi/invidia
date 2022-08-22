@@ -1,4 +1,4 @@
-import { Card, Avatar,Tooltip } from "flowbite-react";
+import { Card, Avatar, Button } from "flowbite-react";
 import { useRouter } from "next/router";
 import { StoryProps } from "../utils";
 import { Session } from "@supabase/gotrue-js/src/lib/types";
@@ -11,6 +11,7 @@ const ProfileCard = () => {
   const [website, setWebsite] = useState<string>();
   const [avatar_url, setAvatarUrl] = useState<string>();
   const [session, setSession] = useState<Session | null>();
+  const router = useRouter();
 
   useEffect(() => {
     setSession(supabase.auth.session());
@@ -75,22 +76,12 @@ const ProfileCard = () => {
             {website || session?.user?.email}
           </span>
           <div className="mt-4 flex space-x-3 lg:mt-6">
-          <Tooltip content="Edit account settings"   placement="bottom">
-            <a
-              href="#"
-              className="inline-flex items-center rounded-lg bg-blue-700 py-2 px-4 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Account
-            </a>
-            </Tooltip>
-            <Tooltip content="send an invite"   placement="bottom">
-            <a
-              href="#"
-              className="inline-flex items-center rounded-lg border border-gray-300 bg-white py-2 px-4 text-center text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
-            >
-              Invite
-            </a>
-            </Tooltip>
+            <Button size="xs"  onClick={()=> router.push("/settings")} outline={false}>
+              Edit profile
+            </Button>
+            <Button size="xs" color="gray">
+              Members
+            </Button>
           </div>
         </div>
         <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
@@ -225,7 +216,7 @@ const ProfileCard = () => {
                   fill="#F5841F"
                 />
               </svg>
-              <span className="ml-3 flex-1 whitespace-nowrap">Projects</span>
+              <span className="ml-3 text-sm flex-1 whitespace-nowrap">Projects</span>
               <span className="ml-3 inline-flex items-center justify-center rounded bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-500 dark:bg-gray-700 dark:text-gray-400">
                 0
               </span>
@@ -251,8 +242,9 @@ const ProfileCard = () => {
                   fill="white"
                 />
               </svg>
-              <span className="ml-3 flex-1 whitespace-nowrap">
-                Notes
+              <span className="ml-3 text-sm flex-1 whitespace-nowrap">Members</span>
+              <span className="ml-3 inline-flex items-center justify-center rounded bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-500 dark:bg-gray-700 dark:text-gray-400">
+                0
               </span>
             </a>
           </li>
@@ -299,8 +291,9 @@ const ProfileCard = () => {
                   />
                 </g>
               </svg>
-              <span className="ml-3 flex-1 whitespace-nowrap">
-                Calender
+              <span className="ml-3 text-sm flex-1 whitespace-nowrap">Notes</span>
+              <span className="ml-3 inline-flex items-center justify-center rounded bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-500 dark:bg-gray-700 dark:text-gray-400">
+                0
               </span>
             </a>
           </li>
@@ -325,7 +318,10 @@ const ProfileCard = () => {
                   fill="#617BFF"
                 />
               </svg>
-              <span className="ml-3 flex-1 whitespace-nowrap">Goals</span>
+              <span className="ml-3 text-sm flex-1 whitespace-nowrap">Goals</span>
+              <span className="ml-3 inline-flex items-center justify-center rounded bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-500 dark:bg-gray-700 dark:text-gray-400">
+                0
+              </span>
             </a>
           </li>
         </ul>

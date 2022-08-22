@@ -107,7 +107,7 @@ const StoryCard = () => {
           Add goal
         </button>
       </Card>
-      <Modal show={showModal} onClose={() => setShowModal(false)}>
+      <Modal show={showModal} onClose={() => setShowModal(false)} size="sm">
         <Modal.Header>My Goals</Modal.Header>
         <Modal.Body>
           <div className="space-y-6">
@@ -126,7 +126,7 @@ const StoryCard = () => {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={() => setShowModal(false)}>Add Goal</Button>
+          <Button onClick={() => setShowModal(false)}>Save Goal</Button>
           <Button color="gray" onClick={() => setShowModal(false)}>
             Decline
           </Button>
