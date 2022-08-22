@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
 import { supabase } from "../utils/supabaseClient";
 import { getToday } from "../utils";
-import { Badge, Button, Label, Modal, Tabs, TextInput } from "flowbite-react";
+import { Badge, Tabs } from "flowbite-react";
 import {
   HiOutlineSortDescending,
   HiOutlineClipboardCheck,
@@ -15,7 +14,7 @@ import Skeleton from "../components/skeleton";
 import Profile from "../components/profile";
 import Latest from "../components/list-card";
 
-const Index = ({ data, error }: { data: StoryProps[]; error: any }) => {
+const Dashboard = ({ data, error }: { data: StoryProps[]; error: any }) => {
   if (error) return toast.error("Error fetching");
   return (
     <>
@@ -32,7 +31,11 @@ const Index = ({ data, error }: { data: StoryProps[]; error: any }) => {
             <div className="col-span-3 ">
               <div>
                 <Tabs.Group aria-label="Default tabs" style="underline">
-                  <Tabs.Item active={true} icon={HiOutlineTable} title="Pinned">
+                  <Tabs.Item
+                    active={true}
+                    icon={HiOutlineSortDescending}
+                    title="Pinned"
+                  >
                     {data ? (
                       data?.map(
                         ({ label, id, content, created_at }: StoryProps) => (
@@ -49,10 +52,7 @@ const Index = ({ data, error }: { data: StoryProps[]; error: any }) => {
                       <Skeleton />
                     )}
                   </Tabs.Item>
-                  <Tabs.Item
-                    title="Doing this week"
-                    icon={HiOutlineSortDescending}
-                  >
+                  <Tabs.Item title="Doing this week" icon={HiOutlineTable}>
                     <Skeleton />
                   </Tabs.Item>
                   <Tabs.Item title="Doing today" icon={HiSparkles}>
@@ -71,7 +71,7 @@ const Index = ({ data, error }: { data: StoryProps[]; error: any }) => {
     </>
   );
 };
-export default Index;
+export default Dashboard;
 
 export async function getStaticProps() {
   const { data, error } = await supabase
