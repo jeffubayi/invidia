@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['flowbite.com'],
+    domains: ['flowbite.com','https://aaepbxpivppmvuaemajn.supabase.co'],
   },
 }
 
