@@ -50,7 +50,7 @@ const AppBar: FC<Record<string, never>> = function () {
 
   const logout = () => {
     supabase.auth.signOut();
-    router.push(`/signin`);
+    router.push(`/`);
   };
 
   return (

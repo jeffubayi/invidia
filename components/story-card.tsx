@@ -1,4 +1,4 @@
-import { Button, Card, Label, Modal, TextInput } from "flowbite-react";
+import { Button, Card, Label, Modal, TextInput,Textarea } from "flowbite-react";
 import { StoryProps } from "../utils";
 import { Formik } from "formik";
 import { supabase } from "../utils/supabaseClient";
@@ -22,8 +22,6 @@ const StoryCard = (stories: StoryProps) => {
       </div>
       <Modal
         show={showModal}
-        size="md"
-        popup={true}
         onClose={() => setShowModal(false)}
       >
         <Formik
@@ -63,10 +61,10 @@ const StoryCard = (stories: StoryProps) => {
             isSubmitting,
           }) => (
             <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-              <Modal.Header>View story</Modal.Header>
+              <Modal.Header>View note : {id}</Modal.Header>
               <Modal.Body>
                 <div className="mb-2 block">
-                  <Label htmlFor="email1" value="Story Label" />
+                  <Label htmlFor="email1" value="Note Label" />
                 </div>
                 <TextInput
                   name="label"
@@ -77,17 +75,17 @@ const StoryCard = (stories: StoryProps) => {
                   type="text"
                   placeholder="label"
                 />
-                <div className="mb-2 block">
-                  <Label htmlFor="password1" value="Story Content" />
+                <div className="my-2 block">
+                  <Label htmlFor="password1" value="Note Content" />
                 </div>
-                <TextInput
+                <Textarea
                   name="content"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.content}
                   id="content"
-                  type="text"
                   placeholder="Content"
+                  rows={4}
                 />
               </Modal.Body>
               <Modal.Footer>
