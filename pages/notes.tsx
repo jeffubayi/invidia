@@ -3,7 +3,7 @@
 import React from "react";
 import useSWR from "swr";
 import toast from "react-hot-toast";
-import { Button, Spinner, Modal, Label, TextInput } from "flowbite-react";
+import { Button, Spinner, Modal, Label, TextInput,Textarea } from "flowbite-react";
 import { Formik } from "formik";
 import StoryCard from "../components/story-card";
 import { StoryProps, fetcher } from "../utils";
@@ -88,15 +88,15 @@ const Notes = () => {
                 <div className="m-2 block">
                   <Label htmlFor="content" value="Note Content" />
                 </div>
-                <TextInput
+                <Textarea
                   name="content"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.content}
                   required={true}
                   id="content"
-                  type="text"
-                  placeholder="Content"
+                  placeholder="Content.."
+                  rows={4}
                 />
                 <p className="text-red-500 text-xs italic">
                   {errors.content && touched.content && errors.content}

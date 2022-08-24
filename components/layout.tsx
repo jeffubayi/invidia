@@ -15,14 +15,19 @@ const Layout = ({ title, children }: Props) => {
   return (
     <>
       <Head>
-        <title className="p-1">{router?.pathname.slice(1)}</title>
+        <title className="p-1">
+          {router?.pathname === "/" ? "Invidia" : router?.pathname.slice(1)}
+        </title>
+        
       </Head>
-      <body className=" bg-gray-200 dark:bg-gray-900 ">
+      
+      <body className=" bg-gray-100 dark:bg-gray-900 ">
         {isLayoutRequired ? <LandingAppBar /> : <AppBar />}
         <main className=" mx-auto max-w-screen-xl  pb-10  ">
           <div className="p-6">{children}</div>
         </main>
       </body>
+      
     </>
   );
 };

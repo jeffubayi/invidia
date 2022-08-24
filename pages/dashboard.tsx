@@ -1,20 +1,21 @@
-import { supabase } from "../utils/supabaseClient";
-import { getToday } from "../utils";
 import { Badge, Tabs } from "flowbite-react";
 import {
   HiOutlineSortDescending,
   HiOutlineClipboardCheck,
   HiSparkles,
-  HiOutlineTable,
+  HiOutlineFire,
 } from "react-icons/hi";
-import { StoryProps } from "../utils";
+import { ProjectProp } from "../utils";
 import toast from "react-hot-toast";
-import StoryCard from "../components/story-list";
+import { supabase } from "../utils/supabaseClient";
+import { getToday } from "../utils";
+import GoalsCard from "../components/story-list";
 import Skeleton from "../components/skeleton";
-import Profile from "../components/profile";
-import Latest from "../components/list-card";
+import ProfileCard from "../components/profile";
+import PopularProjects from "../components/list-card";
+import TimeLineArea from "../components/timeline";
 
-const Dashboard = ({ data, error }: { data: StoryProps[]; error: any }) => {
+const Dashboard = ({ data, error }: { data: ProjectProp[]; error: any }) => {
   if (error) return toast.error("Error fetching");
   return (
     <>
@@ -27,24 +28,26 @@ const Dashboard = ({ data, error }: { data: StoryProps[]; error: any }) => {
             <Badge color="gray">{getToday()}</Badge>
           </div>
           <div className="grid grid-cols-5 gap-4">
-            <Profile />
+            <ProfileCard />
             <div className="col-span-3 ">
               <div>
                 <Tabs.Group aria-label="Default tabs" style="underline">
                   <Tabs.Item
                     active={true}
-                    icon={HiOutlineSortDescending}
-                    title="Pinned"
+                    icon={HiOutlineFire}
+                    title="Popular"
                   >
                     {data ? (
                       data?.map(
-                        ({ label, id, content, created_at }: StoryProps) => (
-                          <Latest
+                        ({ title, id, description, created_at,statuses,completed }: ProjectProp) => (
+                          <PopularProjects
                             key={id}
                             id={id}
-                            label={label}
-                            content={content}
+                            title={title}
+                            description={description}
                             created_at={created_at}
+                            statuses={statuses}
+                            completed ={completed }
                           />
                         )
                       )
@@ -52,7 +55,7 @@ const Dashboard = ({ data, error }: { data: StoryProps[]; error: any }) => {
                       <Skeleton />
                     )}
                   </Tabs.Item>
-                  <Tabs.Item title="Doing this week" icon={HiOutlineTable}>
+                  <Tabs.Item title="Doing this week" icon={HiOutlineSortDescending}>
                     <Skeleton />
                   </Tabs.Item>
                   <Tabs.Item title="Doing today" icon={HiSparkles}>
@@ -62,9 +65,10 @@ const Dashboard = ({ data, error }: { data: StoryProps[]; error: any }) => {
                     <Skeleton />
                   </Tabs.Item>
                 </Tabs.Group>
+                <TimeLineArea />
               </div>
             </div>
-            <StoryCard />
+            <GoalsCard />
           </div>
         </>
       </div>
@@ -75,10 +79,10 @@ export default Dashboard;
 
 export async function getStaticProps() {
   const { data, error } = await supabase
-    .from("stories")
+    .from("projects")
     .select("*")
     .order("created_at")
-    .limit(5);
+    .limit(4);
   return {
     props: {
       data,
