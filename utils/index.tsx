@@ -10,6 +10,16 @@ export interface StoryProps {
   created_at?: number;
 }
 
+export interface ProjectProp {
+  title: string;
+  id: number | string;
+  description: string;
+  created_at?: number;
+  assigned?:string;
+  completed:boolean;
+  statuses?: string;
+}
+
 export const getToday = () => {
   var objToday = new Date(),
     weekday = new Array(
