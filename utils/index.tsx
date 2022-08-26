@@ -15,10 +15,28 @@ export interface ProjectProp {
   id: number | string;
   description: string;
   created_at?: number;
-  assigned?:string;
-  completed:boolean;
+  assigned?: string;
+  completed: boolean;
   statuses?: string;
 }
+export interface TaskProp {
+  id?: number | string;
+  task?: string;
+  created_at?: number;
+  isComplete?:boolean;
+}
+
+export const greeting = () => {
+  const myDate = new Date();
+  const hrs = myDate.getHours();
+
+  let greet;
+
+  if (hrs < 12) greet = "Good Morning";
+  else if (hrs >= 12 && hrs <= 17) greet = "Good Afternoon";
+  else if (hrs >= 17 && hrs <= 24) greet = "Good Evening";
+  return greet;
+};
 
 export const getToday = () => {
   var objToday = new Date(),
@@ -82,5 +100,5 @@ export const getToday = () => {
     curMonth +
     ", " +
     curYear;
-    return today
+  return today;
 };
