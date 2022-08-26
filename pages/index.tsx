@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../utils/supabaseClient";
 import toast from "react-hot-toast";
-import { Label, TextInput, Button } from "flowbite-react";
+import { Label, TextInput, Button, Spinner } from "flowbite-react";
 import { AiFillTwitterCircle } from "react-icons/ai";
 import { GoMarkGithub } from "react-icons/go";
 import { useRouter } from "next/router";
@@ -82,7 +82,16 @@ const Home = () => {
                   />
 
                   <Button type="submit">
-                    {loading ? "Loading" : "Send magic link"}
+                    {loading ? (
+                      <>
+                        <div className="mr-3">
+                          <Spinner size="sm" light={true} />
+                        </div>
+                        Loading...
+                      </>
+                    ) : (
+                      "Send magic link"
+                    )}
                   </Button>
                 </form>
                 <hr className="my-8" />
