@@ -10,10 +10,11 @@ import {
   Textarea,
 } from "flowbite-react";
 import { HiClock } from "react-icons/hi";
-import { ProjectProp } from "../utils";
+import { ProjectProp } from "../../utils";
 
-const DashboardProjects = (stories: ProjectProp) => {
-  const { title, id, description, created_at,statuses,completed  } = stories;
+const DashboardProjects = (projects: ProjectProp) => {
+  const { title, id, description, created_at, statuses, completed, assigned } =
+    projects;
   const [showModal, setShowModal] = React.useState(false);
 
   return (
@@ -25,9 +26,9 @@ const DashboardProjects = (stories: ProjectProp) => {
               <div className="flex items-center space-x-4">
                 <div className="shrink-0">
                   <img
-                    className="h-8 w-8 rounded-full"
+                    className="h-8 w-8 "
                     src="https://flowbite.com/docs/images/blog/image-1.jpg"
-                    alt="Neil image"
+                    alt="assigned"
                   />
                 </div>
                 <div className="min-w-0 flex-1">
@@ -39,8 +40,16 @@ const DashboardProjects = (stories: ProjectProp) => {
                   </p>
                 </div>
                 <div className="inline-flex items-center text-sm font-semibold text-gray-900 dark:text-white">
-                  <Badge color="gray" icon={HiClock}>
-                    {new Date(created_at).toLocaleDateString()}
+                  <Badge
+                    color={
+                      statuses === "created"
+                        ? "gray"
+                        : statuses === "in-progress"
+                        ? "info"
+                        : "success"
+                    }
+                  >
+                    {statuses}
                   </Badge>
                 </div>
               </div>
@@ -49,7 +58,7 @@ const DashboardProjects = (stories: ProjectProp) => {
         </div>
       </Card>
       <Modal show={showModal} size="3xl" onClose={() => setShowModal(false)}>
-        <Modal.Header>{`Project #${id} : ${title}`}</Modal.Header>
+        <Modal.Header>{`#${id} : ${title}`}</Modal.Header>
         <Modal.Body>
           <div className="space-y-6 p-6">
             <div className="flow-root">
@@ -65,7 +74,7 @@ const DashboardProjects = (stories: ProjectProp) => {
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
-                        Neil Sims
+                        {assigned}
                       </p>
                       <p className="truncate text-sm text-gray-500 dark:text-gray-400">
                         email@windster.com
@@ -84,11 +93,11 @@ const DashboardProjects = (stories: ProjectProp) => {
             <Textarea value={description} rows={4} />
             <div className="flex justify-between">
               <div className="flex items-center gap-2">
-                <Checkbox id="remember" checked={completed}  />
+                <Checkbox id="remember" checked={completed} />
                 <Label htmlFor="remember">Completed</Label>
               </div>
               <Badge color="gray" icon={HiClock}>
-              {new Date(created_at).toLocaleDateString()}
+                {new Date(created_at).toLocaleDateString()}
               </Badge>
             </div>
           </div>

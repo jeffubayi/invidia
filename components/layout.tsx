@@ -16,7 +16,7 @@ const Layout = ({ title, children }: Props) => {
     <>
       <Head>
         <title className="p-1">
-          {router?.pathname === "/" ? "Invidia" : router?.pathname.slice(1)}
+          {router?.pathname === "/" ? "Invidia" : `${router?.pathname.slice(1)} | invidia`}
         </title>
         
       </Head>
