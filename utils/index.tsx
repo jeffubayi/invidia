@@ -1,4 +1,5 @@
 import axios from "axios";
+import { supabase } from "./supabaseClient";
 
 export const fetcher: any = (url: string) =>
   axios.get(url).then((res) => res.data);
@@ -23,7 +24,7 @@ export interface TaskProp {
   id?: number | string;
   task?: string;
   created_at?: number;
-  isComplete?:boolean;
+  isComplete?: boolean;
 }
 
 export const greeting = () => {
@@ -102,3 +103,27 @@ export const getToday = () => {
     curYear;
   return today;
 };
+
+// export async function getProfile() {
+//   try {
+//     const user = supabase.auth.user();
+
+//     let { data, error, status } = await supabase
+//       .from("profiles")
+//       .select(`username,avatar_url`)
+//       .eq("id", user?.id)
+//       .single();
+
+//     if (error && status !== 406) {
+//       throw error;
+//     }
+
+//     if (data) {
+//       if (typeof window !== "undefined") localStorage.setItem("user", data.username);
+
+//       return data;
+//     }
+//   } catch (error) {
+//     error instanceof Error && console.log(error);
+//   }
+// }
