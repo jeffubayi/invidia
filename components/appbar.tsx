@@ -107,9 +107,6 @@ const AppBar: FC<Record<string, never>> = function () {
         <Navbar.Link href="/projects" active={router.pathname === "/projects"}>
           Projects
         </Navbar.Link>
-        <Navbar.Link href="/reports" active={router.pathname === "/reports"}>
-          Reports
-        </Navbar.Link>
         <Navbar.Link href="/notes" active={router.pathname === "/notes"}>
           Notes
         </Navbar.Link>

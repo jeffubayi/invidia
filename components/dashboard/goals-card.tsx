@@ -1,86 +1,141 @@
-import { Card, Modal, Button, Textarea, Checkbox } from "flowbite-react";
+import {
+  Card,
+  Modal,
+  Button,
+  Textarea,
+  Checkbox,
+  TextInput,
+} from "flowbite-react";
 import React from "react";
 import { Formik, Form, Field } from "formik";
 import toast from "react-hot-toast";
 import { supabase } from "../../utils/supabaseClient";
 import { TaskProp } from "../../utils";
+import { HiXCircle, HiOutlineServer } from "react-icons/hi";
 
 const StoryCard = () => {
   const [showModal, setShowModal] = React.useState(false);
-  const [tasks, setTasks] = React.useState<TaskProp[]>();
+  const [todos, setTodos] = React.useState<TaskProp[]>();
+  const [newTaskText, setNewTaskText] = React.useState("");
+  const [isCompleted, setIsCompleted] = React.useState(false);
+
+  const toggle = async (id: string | number) => {
+    try {
+      const { data, error } = await supabase
+        .from("tasks")
+        .update({ isComplete: !isCompleted })
+        .eq("id", id)
+        .single();
+      if (error) {
+        toast.error("Error updating");
+      }
+      setIsCompleted(data.isComplete);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   React.useEffect(() => {
     (async function getTasks() {
-      const { data } = await supabase.from("tasks").select("*").limit(10);
-      setTasks(data);
+      let { data: todos, error } = await supabase
+        .from("tasks")
+        .select("*")
+        .limit(10);
+      if (error) toast.error("Error loading");
+      else setTodos(todos);
     })();
-  }, [tasks]);
+  }, [todos]);
+
+  const addTodo = async (taskText) => {
+    let task = taskText.trim();
+    if (task.length) {
+      let { data: todo, error } = await supabase
+        .from("tasks")
+        .insert({ task })
+        .single();
+      if (error) toast.error("Error creating");
+      else setTodos([...todos, todo]);
+    }
+  };
+
+  const deleteTodo = async (id) => {
+    try {
+      await supabase.from("tasks").delete().eq("id", id);
+      setTodos(todos.filter((x) => x.id != id));
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   return (
     <div className="hidden lg:block">
       <Card>
         <h5 className=" text-xl font-medium text-gray-500 dark:text-gray-400">
-          Today&apos;s Goals
+          Today&apos;s goals
         </h5>
-        <ul role="list" className="my-2 space-y-5">
-          {tasks ? (
-            tasks?.map(({ id, task, isComplete }: TaskProp) => (
-              <li className="flex space-x-3 " key={id}>
-                <Formik
-                  initialValues={{
-                    isComplete: null,
-                  }}
-                  onSubmit={async (values) => {
-                    alert(JSON.stringify(values, null, 2));
-                  }}
-                >
-                  {({ values }) => (
-                    <Form>
-                      <Field
-                        component={Checkbox}
-                        name="isComplete"
-                        value={isComplete}
-                        checked={isComplete === null ? false :isComplete }
-                        onChange={async (values) => {
-                          console.log(`values`, values.target.checked);
-                          await supabase
-                            .from("tasks")
-                            .update([
-                              {
-                                isComplete: values.target.checked,
-                                updated_at: new Date(),
-                              },
-                            ])
-                            .match({ id: id });
-                        }}
-                      />
-                    </Form>
-                  )}
-                </Formik>
-                <span
-                  className={`text-base font-normal leading-tight ${
-                    isComplete ? "line-through" : ""
-                  } text-gray-500 dark:text-gray-400`}
-                >
-                  {task}
-                </span>
+
+        <ul role="list">
+          {todos?.length > 0 ? (
+            todos?.map(({ id, task, isComplete }: TaskProp) => (
+              <li
+                key={id}
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggle(id);
+                }}
+                className="py-3 sm:py-4"
+              >
+                <div className="flex items-center space-x-4">
+                  <div className="shrink-0">
+                    <Checkbox
+                      onChange={(e) => toggle(id)}
+                      checked={isComplete}
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p
+                      className={`truncate text-sm font-medium text-gray-900 dark:text-white ${
+                        isComplete ? "line-through" : ""
+                      }`}
+                    >
+                      {task}
+                    </p>
+                  </div>
+                  <div className="inline-flex">
+                    <HiXCircle
+                      className="text-gray-500 hover:text-red-500"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        deleteTodo(id);
+                      }}
+                    />
+                  </div>
+                </div>
               </li>
             ))
           ) : (
-            <span className="text-base font-normal leading-tight text-gray-500">
-              No Tasks for today
+            <span className=" flex items-center justify-center text-sm font-normal leading-tight text-gray-500">
+              <HiOutlineServer />
+              <div className="block">No plans yet</div>
             </span>
           )}
         </ul>
-        <button
-          type="button"
-          onClick={() => setShowModal(true)}
-          className="inline-flex w-full justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900"
-        >
-          Add task
-        </button>
+        <div className="flex gap-1 my-1  ">
+          <TextInput
+            placeholder="Add goal... "
+            sizing="md"
+            value={newTaskText}
+            onChange={(e) => {
+              setNewTaskText(e.target.value);
+            }}
+          />
+          <Button size="sm" onClick={() => addTodo(newTaskText)}>
+            Add
+          </Button>
+        </div>
       </Card>
-      <Modal
+      {/* <Modal
         show={showModal}
         position="top-right"
         onClose={() => setShowModal(false)}
@@ -133,7 +188,7 @@ const StoryCard = () => {
             </form>
           )}
         </Formik>
-      </Modal>
+      </Modal> */}
     </div>
   );
 };

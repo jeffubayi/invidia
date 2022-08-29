@@ -20,7 +20,6 @@ const BottomNav = () => {
       </Navbar.Brand>
       <div className="flex md:order-2">
         <DarkThemeToggle />
-        <Button>Get started</Button>
         <Navbar.Toggle />
       </div>
     </Navbar>

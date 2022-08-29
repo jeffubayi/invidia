@@ -48,6 +48,7 @@ export default function Account() {
         setUsername(data.username);
         setWebsite(data.website);
         setAvatarUrl(data.avatar_url);
+        if (typeof window !== "undefined") localStorage.setItem("user", data.username);
       }
     } catch (error) {
       error instanceof Error && alert(error.message);
