@@ -22,60 +22,64 @@ const Dashboard = ({ data, error }: { data: ProjectProp[]; error: any }) => {
       <div className="container">
         <>
           <div className="mb-4 flex items-center justify-between">
-            <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">
+            <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-gray-400">
               {greeting()}
             </h5>
             <Badge color="gray">{getToday()}</Badge>
           </div>
-          <div className="grid grid-cols-5 gap-4">
-            <ProfileCard />
+          <div className="grid grid-cols-6 gap-4">
+            <div className="col-span-1">
+              <ProfileCard />
+            </div>
             <div className="col-span-3 ">
-              <div>
-                <Tabs.Group aria-label="Default tabs" style="underline">
-                  <Tabs.Item active={true} icon={HiOutlineFire} title="Popular">
-                    {data ? (
-                      data?.map(
-                        ({
-                          title,
-                          id,
-                          description,
-                          created_at,
-                          statuses,
-                          completed,
-                        }: ProjectProp) => (
-                          <PopularProjects
-                            key={id}
-                            id={id}
-                            title={title}
-                            description={description}
-                            created_at={created_at}
-                            statuses={statuses}
-                            completed={completed}
-                          />
-                        )
+              <Tabs.Group aria-label="Default tabs" style="underline">
+                <Tabs.Item active={true} icon={HiOutlineFire} title="Popular">
+                  {data ? (
+                    data?.map(
+                      ({
+                        title,
+                        id,
+                        description,
+                        created_at,
+                        statuses,
+                        completed,
+                      }: ProjectProp) => (
+                        <PopularProjects
+                          key={id}
+                          id={id}
+                          title={title}
+                          description={description}
+                          created_at={created_at}
+                          statuses={statuses}
+                          completed={completed}
+                        />
                       )
-                    ) : (
-                      <Skeleton />
-                    )}
-                  </Tabs.Item>
-                 
-                  <Tabs.Item title="Doing today" icon={HiSparkles}>
+                    )
+                  ) : (
                     <Skeleton />
-                  </Tabs.Item>
-                  <Tabs.Item
-                    title="Doing this week"
-                    icon={HiOutlineSortDescending}
-                  >
-                    <Skeleton />
-                  </Tabs.Item>
-                  <Tabs.Item title="Completed" icon={HiOutlineClipboardCheck}>
-                    <Skeleton />
-                  </Tabs.Item>
-                </Tabs.Group>
+                  )}
+                </Tabs.Item>
+
+                <Tabs.Item title="Doing today" icon={HiSparkles}>
+                  <Skeleton />
+                </Tabs.Item>
+                <Tabs.Item
+                  title="Doing this week"
+                  icon={HiOutlineSortDescending}
+                >
+                  <Skeleton />
+                </Tabs.Item>
+                <Tabs.Item title="Completed" icon={HiOutlineClipboardCheck}>
+                  <Skeleton />
+                </Tabs.Item>
+              </Tabs.Group>
+              <div className="my-5 mx-3 ">
                 <TimeLineArea />
               </div>
             </div>
-            <GoalsCard />
+            <div className="col-span-2 ">
+              {/* <Skeleton /> */} <GoalsCard />
+            </div>
           </div>
         </>
       </div>

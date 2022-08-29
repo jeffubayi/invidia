@@ -36,7 +36,7 @@ const Home = () => {
       setLoading(true);
       const { error } = await supabase.auth.signIn({ email });
       if (error) throw error;
-      toast.success(` Please check your email ${email} for the login link!`);
+      toast.success(` Check your email ${email} for the login link!`);
     } catch (error) {
       error instanceof Error && alert(error.message);
     } finally {
@@ -114,3 +114,44 @@ const Home = () => {
   );
 };
 export default Home;
+
+
+
+// import { useState, useEffect } from "react";
+// import { supabase } from "../utils/supabaseClient";
+// import toast from "react-hot-toast";
+// import { AiFillTwitterCircle } from "react-icons/ai";
+// import { GoMarkGithub } from "react-icons/go";
+// import { useRouter } from "next/router";
+// import { Session } from "@supabase/gotrue-js/src/lib/types";
+// import { Auth, Typography, Button } from "@supabase/ui";
+
+// const Container = (props) => {
+//   const { user } = Auth.useUser();
+//   if (user)
+//     return (
+//       <>
+//         <Typography.Text>Signed in: {user.email}</Typography.Text>
+//         <Button block onClick={() => props.supabaseClient.auth.signOut()}>
+//           Sign out
+//         </Button>
+//       </>
+//     );
+//   return props.children;
+// };
+
+// export default function AuthBasic() {
+//   return (
+//     <Auth.UserContextProvider supabaseClient={supabase}>
+//       <Container supabaseClient={supabase}>
+//         <main className="mx-auto max-w-xs bg-white dark:bg-gray-800 py-6 px-4 rounded ">
+//           <Auth
+//             supabaseClient={supabase}
+//             providers={["google", "github"]}
+//             socialLayout="horizontal"
+//           />
+//         </main>
+//       </Container>
+//     </Auth.UserContextProvider>
+//   );
+// }
