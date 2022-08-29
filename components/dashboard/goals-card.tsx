@@ -121,17 +121,16 @@ const StoryCard = () => {
             </span>
           )}
         </ul>
-        <div className="flex gap-1 my-1  ">
-          <TextInput
-            placeholder="Add goal... "
-            sizing="md"
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <Textarea
+            placeholder="Add a goal... "
             value={newTaskText}
             onChange={(e) => {
               setNewTaskText(e.target.value);
             }}
           />
           <Button size="sm" onClick={() => addTodo(newTaskText)}>
-            Add
+            +
           </Button>
         </div>
       </Card>
