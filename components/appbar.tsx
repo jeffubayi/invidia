@@ -67,7 +67,8 @@ const AppBar: FC<Record<string, never>> = function () {
       </Navbar.Brand>
       <div className="flex md:order-2">
         <DarkThemeToggle />
-        <Dropdown
+        <Navbar.Toggle />
+        {/* <Dropdown
           arrowIcon={false}
           inline={true}
           label={
@@ -97,11 +98,13 @@ const AppBar: FC<Record<string, never>> = function () {
           </Dropdown.Item>
           <Dropdown.Divider />
           <Dropdown.Item onClick={logout}>Log out</Dropdown.Item>
-        </Dropdown>
-        <Navbar.Toggle />
+        </Dropdown> */}
       </div>
       <Navbar.Collapse>
-        <Navbar.Link href="/dashboard" active={router.pathname === "/dashboard"}>
+        <Navbar.Link
+          href="/dashboard"
+          active={router.pathname === "/dashboard"}
+        >
           Dashboard
         </Navbar.Link>
         <Navbar.Link href="/projects" active={router.pathname === "/projects"}>

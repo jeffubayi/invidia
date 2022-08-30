@@ -77,7 +77,7 @@ const ProfileCard = () => {
     }
   }
   return (
-    <div className="hidden lg:block">
+    <>
       <Card>
         <div className="flex flex-col items-center pb-5">
           <Avatar
@@ -234,7 +234,7 @@ const ProfileCard = () => {
           </Modal.Body>
         </Modal>
       )}
-    </div>
+    </>
   );
 };
 

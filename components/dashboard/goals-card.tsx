@@ -68,7 +68,7 @@ const StoryCard = () => {
   };
 
   return (
-    <div className="hidden lg:block">
+    <>
       <Card>
         <h5 className=" text-xl font-medium text-gray-500 dark:text-gray-400">
           Tasks
@@ -188,7 +188,7 @@ const StoryCard = () => {
           )}
         </Formik>
       </Modal> */}
-    </div>
+    </>
   );
 };
 
