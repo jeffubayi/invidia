@@ -64,12 +64,12 @@ const Dashboard = ({ data, error }: { data: ProjectProp[]; error: any }) => {
                   <Skeleton />
                 </Tabs.Item>
                 <Tabs.Item
-                  title="Doing this week"
+                  title="Planned"
                   icon={HiOutlineSortDescending}
                 >
                   <Skeleton />
                 </Tabs.Item>
-                <Tabs.Item title="Completed" icon={HiOutlineClipboardCheck}>
+                <Tabs.Item title="Assigned to me" icon={HiOutlineClipboardCheck}>
                   <Skeleton />
                 </Tabs.Item>
               </Tabs.Group>
