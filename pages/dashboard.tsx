@@ -19,69 +19,63 @@ const Dashboard = ({ data, error }: { data: ProjectProp[]; error: any }) => {
   if (error) return toast.error("Error fetching");
   return (
     <>
-      <div className="container">
-        <>
-          <div className="mb-4 flex items-center justify-between">
-            <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-gray-400">
-              {greeting()}
-            </h5>
-            <Badge color="gray">{getToday()}</Badge>
-          </div>
-          <div className="grid grid-cols-6 gap-4">
-            <div className="col-span-1">
-              <ProfileCard />
-            </div>
-            <div className="col-span-3 ">
-              <Tabs.Group aria-label="Default tabs" style="underline">
-                <Tabs.Item active={true} icon={HiOutlineFire} title="Popular">
-                  {data ? (
-                    data?.map(
-                      ({
-                        title,
-                        id,
-                        description,
-                        created_at,
-                        statuses,
-                        completed,
-                      }: ProjectProp) => (
-                        <PopularProjects
-                          key={id}
-                          id={id}
-                          title={title}
-                          description={description}
-                          created_at={created_at}
-                          statuses={statuses}
-                          completed={completed}
-                        />
-                      )
-                    )
-                  ) : (
-                    <Skeleton />
-                  )}
-                </Tabs.Item>
+      <section className="mb-4 flex items-center justify-between">
+        <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-gray-400">
+          {greeting()}
+        </h5>
+        <Badge color="gray">{getToday()}</Badge>
+      </section>
+      <div className="col-span-2 space-y-8 md:grid md:grid-cols-6 md:gap-5 md:space-y-0">
+        <section className="md:col-span-1">
+          {" "}
+          <ProfileCard />
+        </section>
+        <section className="md:col-span-3">
+          <Tabs.Group aria-label="Default tabs" style="underline">
+            <Tabs.Item active={true} icon={HiOutlineFire} title="Popular">
+              {data ? (
+                data?.map(
+                  ({
+                    title,
+                    id,
+                    description,
+                    created_at,
+                    statuses,
+                    completed,
+                  }: ProjectProp) => (
+                    <PopularProjects
+                      key={id}
+                      id={id}
+                      title={title}
+                      description={description}
+                      created_at={created_at}
+                      statuses={statuses}
+                      completed={completed}
+                    />
+                  )
+                )
+              ) : (
+                <Skeleton />
+              )}
+            </Tabs.Item>
 
-                <Tabs.Item title="Doing today" icon={HiSparkles}>
-                  <Skeleton />
-                </Tabs.Item>
-                <Tabs.Item
-                  title="Planned"
-                  icon={HiOutlineSortDescending}
-                >
-                  <Skeleton />
-                </Tabs.Item>
-                <Tabs.Item title="Assigned to me" icon={HiOutlineClipboardCheck}>
-                  <Skeleton />
-                </Tabs.Item>
-              </Tabs.Group>
-              <div className="my-5 mx-3 ">
-                <TimeLineArea />
-              </div>
-            </div>
-            <div className="col-span-2 ">
-              {/* <Skeleton /> */} <GoalsCard />
-            </div>
+            <Tabs.Item title="Doing today" icon={HiSparkles}>
+              <Skeleton />
+            </Tabs.Item>
+            <Tabs.Item title="Planned" icon={HiOutlineSortDescending}>
+              <Skeleton />
+            </Tabs.Item>
+            <Tabs.Item title="Assigned to me" icon={HiOutlineClipboardCheck}>
+              <Skeleton />
+            </Tabs.Item>
+          </Tabs.Group>
+          <div className="my-5 mx-3 ">
+            <TimeLineArea />
           </div>
-        </>
+        </section>
+        <section className="md:col-span-2">
+          <GoalsCard />
+        </section>
       </div>
     </>
   );
