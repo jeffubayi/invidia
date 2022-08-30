@@ -71,7 +71,7 @@ const StoryCard = () => {
     <div className="hidden lg:block">
       <Card>
         <h5 className=" text-xl font-medium text-gray-500 dark:text-gray-400">
-          Today&apos;s goals
+          Tasks
         </h5>
 
         <ul role="list">
@@ -123,7 +123,7 @@ const StoryCard = () => {
         </ul>
         <div className="mb-3 flex items-center justify-between gap-2">
           <Textarea
-            placeholder="Add a goal... "
+            placeholder="Add a task... "
             value={newTaskText}
             onChange={(e) => {
               setNewTaskText(e.target.value);

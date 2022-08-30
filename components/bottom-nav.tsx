@@ -20,7 +20,7 @@ const BottomNav = () => {
       </Navbar.Brand>
       <div className="flex md:order-2">
         <DarkThemeToggle />
-        <Navbar.Toggle />
+        <Button onClick={() => router.push("/signin")}>Get started</Button>
       </div>
     </Navbar>
   );

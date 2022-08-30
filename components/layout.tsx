@@ -11,7 +11,7 @@ interface Props {
 const Layout = ({ title, children }: Props) => {
   const router = useRouter();
   const isLayoutRequired =
-    typeof window !== "undefined" && router.pathname === "/";
+    (typeof window !== "undefined" && router.pathname === "/") ;
   return (
     <>
       <Head>
