@@ -15,6 +15,7 @@ export default async function handler(
 ) {
   try {
     const body = JSON.parse(req.body);
+    const user = supabase.auth.user();
     const { label, content, created_at } = body.values;
     const { data, error, status } = await supabase
       .from("stories")
@@ -23,6 +24,7 @@ export default async function handler(
           label,
           content,
           created_at,
+          user_id:user.id
         },
       ])
       .single();

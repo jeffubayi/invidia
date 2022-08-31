@@ -14,8 +14,10 @@ export default async function handler(
 ) {
   try {
     const body = JSON.parse(req.body);
-    console.log("body",body)
-    const { title, description, created_at, completed, assigned ,statuses} = body.values;
+    const user = supabase.auth.user();
+    console.log("body", body);
+    const { title, description, created_at, completed, assigned, statuses } =
+      body.values;
     const { data, error, status } = await supabase
       .from("projects")
       .insert([
@@ -26,6 +28,7 @@ export default async function handler(
           completed,
           assigned,
           statuses,
+          user_id:user.id
         },
       ])
       .single();

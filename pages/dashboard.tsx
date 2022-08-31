@@ -83,9 +83,11 @@ const Dashboard = ({ data, error }: { data: ProjectProp[]; error: any }) => {
 export default Dashboard;
 
 export async function getStaticProps() {
+  const user = supabase.auth.user();
   const { data, error } = await supabase
     .from("projects")
     .select("*")
+    .eq("user_id", user?.id)
     .order("created_at")
     .limit(4);
   return {

@@ -332,9 +332,11 @@ const Projects = () => {
 export default Projects;
 
 export async function getStaticProps() {
+  const user = supabase.auth.user();
   const { data, error } = await supabase
     .from("stories")
     .select("*")
+    .eq("user_id", user?.id)
     .order("id");
   return {
     props: {
