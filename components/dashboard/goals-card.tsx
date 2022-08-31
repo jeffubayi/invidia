@@ -18,7 +18,7 @@ const StoryCard = () => {
   const [todos, setTodos] = React.useState<TaskProp[]>();
   const [newTaskText, setNewTaskText] = React.useState("");
   const [isCompleted, setIsCompleted] = React.useState(false);
-
+  const user = supabase.auth.user();
   const toggle = async (id: string | number) => {
     try {
       const { data, error } = await supabase
@@ -40,6 +40,7 @@ const StoryCard = () => {
       let { data: todos, error } = await supabase
         .from("tasks")
         .select("*")
+        .eq("user_id", user?.id)
         .limit(10);
       if (error) toast.error("Error loading");
       else setTodos(todos);
@@ -51,7 +52,7 @@ const StoryCard = () => {
     if (task.length) {
       let { data: todo, error } = await supabase
         .from("tasks")
-        .insert({ task })
+        .insert({ task ,user_id: user?.id})
         .single();
       if (error) toast.error("Error creating");
       else setTodos([...todos, todo]);
