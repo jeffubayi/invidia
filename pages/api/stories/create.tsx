@@ -15,8 +15,7 @@ export default async function handler(
 ) {
   try {
     const body = JSON.parse(req.body);
-    const user = supabase.auth.user();
-    const { label, content, created_at } = body.values;
+    const { label, content, created_at,user_id } = body.values;
     const { data, error, status } = await supabase
       .from("stories")
       .insert([
@@ -24,7 +23,7 @@ export default async function handler(
           label,
           content,
           created_at,
-          user_id:user.id
+          user_id
         },
       ])
       .single();

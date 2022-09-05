@@ -14,9 +14,35 @@ import Skeleton from "../components/skeleton";
 import ProfileCard from "../components/dashboard/profile";
 import PopularProjects from "../components/dashboard/project-card";
 import TimeLineArea from "../components/dashboard/activity";
+import TimeLineOnboarding from "../components/dashboard/onboarding";
+import React from "react";
 
-const Dashboard = ({ data, error }: { data: ProjectProp[]; error: any }) => {
-  if (error) return toast.error("Error fetching");
+const Dashboard = () => {
+  const [projects, setProjects] = React.useState<ProjectProp[]>();
+  const [profile, setProfile] = React.useState([]);
+  const user_id =
+    typeof window !== "undefined" && sessionStorage.getItem("user_id");
+
+  React.useEffect(() => {
+    (async function getProjects() {
+      let { data: projects, error } = await supabase
+        .from("projects")
+        .select("*")
+        .eq("user_id", user_id);
+      if (error) toast.error("Error loading");
+      else setProjects(projects);
+    })();
+    (async function getProfile() {
+      let { data} = await supabase
+        .from("profiles")
+        .select(`username, website, avatar_url`)
+        .eq("id", user_id)
+        .single();
+      setProfile(data);
+      console.log('prof',data)
+    })();
+  }, [projects, user_id]);
+  console.log('profi',profile)
   return (
     <>
       <section className="mb-4 flex items-center justify-between">
@@ -33,8 +59,8 @@ const Dashboard = ({ data, error }: { data: ProjectProp[]; error: any }) => {
         <section className="md:col-span-3">
           <Tabs.Group aria-label="Default tabs" style="underline">
             <Tabs.Item active={true} icon={HiOutlineFire} title="Popular">
-              {data ? (
-                data?.map(
+              {projects ? (
+                projects?.map(
                   ({
                     title,
                     id,
@@ -70,7 +96,11 @@ const Dashboard = ({ data, error }: { data: ProjectProp[]; error: any }) => {
             </Tabs.Item>
           </Tabs.Group>
           <div className="my-5 mx-3 ">
-            <TimeLineArea />
+            {profile ==  null ? (
+              <TimeLineOnboarding />
+            ) : (
+              <TimeLineArea />
+            )}
           </div>
         </section>
         <section className="md:col-span-2">
@@ -83,11 +113,12 @@ const Dashboard = ({ data, error }: { data: ProjectProp[]; error: any }) => {
 export default Dashboard;
 
 export async function getStaticProps() {
-  const user = supabase.auth.user();
+  const user =
+    typeof window !== "undefined" && sessionStorage.getItem("user_id");
   const { data, error } = await supabase
     .from("projects")
     .select("*")
-    .eq("user_id", user?.id)
+    .eq("user_id", user)
     .order("created_at")
     .limit(4);
   return {

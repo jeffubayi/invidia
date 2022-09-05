@@ -28,6 +28,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       if (router.pathname === "/") {
         router.push("/dashboard");
       }
+      console.log("usee",user)
+      session && (typeof window !== "undefined") && sessionStorage.setItem("user_id", user.id);
+      session && (typeof window !== "undefined") && sessionStorage.setItem("loggedIn", session.user.email);
+      
     }
   }, [router.pathname, user, router, ]);
 

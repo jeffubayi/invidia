@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { useState, useCallback, useReducer } from "react";
+import { useState, useCallback, useReducer, useEffect } from "react";
 import { supabase } from "../utils/supabaseClient";
 import toast from "react-hot-toast";
 import {
@@ -26,23 +26,34 @@ import useSWR from "swr";
 import { Formik } from "formik";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import ProjectList from "../components/projects/list";
+import { useRouter } from "next/router";
+
 const dragReducer = (state, action) => {
   return state;
 };
 
 const Projects = () => {
   const [createProjectModal, setCreateProjectModal] = React.useState(false);
-  const [showModal, setShowModal] = React.useState(false);
-  const { data, error } = useSWR("/api/projects", fetcher);
-  const getAccessToken = () => {
-    if (typeof window !== "undefined") return localStorage.getItem("user");
-  };
+  const [, setShowModal] = React.useState(false);
+  const [projects, setProjects] = React.useState<ProjectProp[]>();
+  const router = useRouter();
+  const user_id =
+    typeof window !== "undefined" && sessionStorage.getItem("user_id");
+    const assigned =
+    typeof window !== "undefined" && sessionStorage.getItem("loggedIn");
 
-  console.log(`projo`, getAccessToken());
-  // const [state, dispatch] = useReducer(dragReducer, {
-  //   data,
-  // });
-  // console.log("item", state);
+  useEffect(() => {
+    (async function getProjects() {
+      let { data: projects, error } = await supabase
+        .from("projects")
+        .select("*")
+        .eq("user_id", user_id )
+      if (error) toast.error("Error loading");
+      else setProjects(projects);
+    })();
+  }, [projects, user_id ]);
+
+
   const onDragEnd = useCallback((result) => {
     const { destination, source, draggableId, droppableId, index, reason } =
       result;
@@ -51,23 +62,9 @@ const Projects = () => {
       if (!destination) {
         return;
       }
-      // dispatch({
-      //   type: "MOVE",
-      //   from: droppableId,
-      //   to: droppableId,
-      //   fromIndex: index,
-      //   toIndex: index,
-      // });
     }
   }, []);
-  if (error) return toast.error("Error fetching");
-  if (!data)
-    return (
-      <div className="flex items-center justify-center">
-        <Spinner color="info" />
-        Loading projects..
-      </div>
-    );
+
 
   return (
     <div>
@@ -95,7 +92,7 @@ const Projects = () => {
                     <p className="truncate text-sm text-gray-500 dark:text-gray-400 mb-2">
                       <Badge color="info">TO-DO</Badge>
                     </p>
-                    {data.data?.map(
+                    {projects?.length > 0 ? projects?.map(
                       ({
                         title,
                         id,
@@ -149,7 +146,7 @@ const Projects = () => {
                           </Draggable>
                         );
                       }
-                    )}
+                    ):(  <Spinner color="info" />)}
                     {provided.placeholder}
                   </div>
                 );
@@ -166,7 +163,7 @@ const Projects = () => {
                     <p className="truncate text-sm text-gray-500 dark:text-gray-400 mb-2">
                       <Badge color="success">DONE</Badge>
                     </p>
-                    {data.data?.map(
+                    {projects?.map(
                       ({
                         title,
                         id,
@@ -245,11 +242,13 @@ const Projects = () => {
             description: "",
             created_at: new Date(),
             completed: false,
-            assigned: getAccessToken(),
+            assigned,
             statuses: "todo",
+            user_id
           }}
           validate={(values) => {}}
           onSubmit={async (values) => {
+            console.log(`values`,values);
             try {
               await fetch("/api/projects/create", {
                 method: "POST",
@@ -331,17 +330,3 @@ const Projects = () => {
 };
 export default Projects;
 
-export async function getStaticProps() {
-  const user = supabase.auth.user();
-  const { data, error } = await supabase
-    .from("stories")
-    .select("*")
-    .eq("user_id", user?.id)
-    .order("id");
-  return {
-    props: {
-      data,
-      error,
-    },
-  };
-}

@@ -13,7 +13,8 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   try {
-    let { data, error,status } = await supabase.from("projects").select();
+    const user_id =    (typeof window !== "undefined") && sessionStorage.getItem("user_id")
+    let { data, error,status } = await supabase.from("projects").select("*").eq("user_id", user_id);
 
     if (error) {
       res.status(status).json({ error: error.message });

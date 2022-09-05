@@ -1,24 +1,38 @@
-
-
 import React from "react";
 import useSWR from "swr";
 import toast from "react-hot-toast";
-import { Button, Spinner, Modal, Label, TextInput,Textarea } from "flowbite-react";
+import {
+  Button,
+  Spinner,
+  Modal,
+  Label,
+  TextInput,
+  Textarea,
+} from "flowbite-react";
 import { Formik } from "formik";
 import StoryCard from "../components/story-card";
 import { StoryProps, fetcher } from "../utils";
+import { supabase } from "../utils/supabaseClient";
 
 const Notes = () => {
   const [showModal, setShowModal] = React.useState(false);
-  const { data, error } = useSWR("/api/stories", fetcher);
-  if (error) return toast.error("Error fetching");
-  if (!data)
-    return (
-      <div className="flex items-center justify-center">
-        <Spinner color="info" />
-        Loading notes..
-      </div>
-    );
+  const [notes, setNotes] = React.useState<StoryProps[]>();
+  const user_id =
+    typeof window !== "undefined" && sessionStorage.getItem("user_id");
+
+  React.useEffect(() => {
+    (async function getNotes() {
+      let {
+        data: notes,
+        error,
+      } = await supabase.from("stories").select("*").eq("user_id", user_id);
+      if (error) toast.error("Error loading");
+
+      if (error) return toast.error("Error fetching");
+      else setNotes(notes);
+    })();
+  }, [notes, user_id]);
+  console.log("data", notes, user_id);
   return (
     <div className="m-4">
       <div className="mb-4 flex items-center justify-between">
@@ -28,9 +42,13 @@ const Notes = () => {
         <Button onClick={() => setShowModal(true)}>Add Note</Button>
       </div>
       <div className="flex flex-wrap -mx-1 lg:-mx-4">
-        {data.data?.map(({ label, id, content }: StoryProps) => (
-          <StoryCard key={id} id={id} label={label} content={content} />
-        ))}
+        {notes?.length > 0 ? (
+          notes?.map(({ label, id, content }: StoryProps) => (
+            <StoryCard key={id} id={id} label={label} content={content} />
+          ))
+        ) : (
+          <Spinner color="info" />
+        )}
       </div>
       <Modal show={showModal} onClose={() => setShowModal(false)}>
         <Formik
@@ -38,6 +56,7 @@ const Notes = () => {
             label: "",
             content: "",
             created_at: new Date(),
+            user_id,
           }}
           validate={(values) => {}}
           onSubmit={async (values) => {
@@ -64,7 +83,7 @@ const Notes = () => {
             handleChange,
             handleBlur,
             handleSubmit,
-            isSubmitting,
+            dirty,
           }) => (
             <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
               <Modal.Header>Create new note</Modal.Header>
@@ -103,7 +122,7 @@ const Notes = () => {
                 </p>
               </Modal.Body>
               <Modal.Footer>
-                <Button type="submit" disabled={isSubmitting}>
+                <Button type="submit" disabled={!dirty}>
                   Submit
                 </Button>
                 <Button color="gray" onClick={() => setShowModal(false)}>

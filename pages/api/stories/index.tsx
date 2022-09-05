@@ -13,8 +13,8 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   try {
-    const user = supabase.auth.user();
-    let { data, error,status } = await supabase.from("stories").select("*").eq("user_id", user?.id);
+    const user_id =    (typeof window !== "undefined") && sessionStorage.getItem("user_id")
+    let { data, error,status } = await supabase.from("stories").select("*").eq("user_id", user_id);
 
     if (error) {
       res.status(status).json({ error: error.message });
