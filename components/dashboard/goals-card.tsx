@@ -18,7 +18,7 @@ const StoryCard = () => {
   const [todos, setTodos] = React.useState<TaskProp[]>();
   const [newTaskText, setNewTaskText] = React.useState("");
   const [isCompleted, setIsCompleted] = React.useState(false);
-  const user = supabase.auth.user();
+  const user_id = (typeof window !== "undefined") && sessionStorage.getItem("user_id")
   const toggle = async (id: string | number) => {
     try {
       const { data, error } = await supabase
@@ -40,7 +40,7 @@ const StoryCard = () => {
       let { data: todos, error } = await supabase
         .from("tasks")
         .select("*")
-        .eq("user_id", user?.id)
+        .eq("user_id", user_id )
         .limit(10);
       if (error) toast.error("Error loading");
       else setTodos(todos);
@@ -52,7 +52,7 @@ const StoryCard = () => {
     if (task.length) {
       let { data: todo, error } = await supabase
         .from("tasks")
-        .insert({ task ,user_id: user?.id})
+        .insert({ task ,user_id})
         .single();
       if (error) toast.error("Error creating");
       else setTodos([...todos, todo]);
@@ -124,7 +124,7 @@ const StoryCard = () => {
         </ul>
         <div className="mb-3 flex items-center justify-between gap-2">
           <Textarea
-            placeholder="Add a task... "
+            placeholder="Whats happening today... "
             value={newTaskText}
             onChange={(e) => {
               setNewTaskText(e.target.value);

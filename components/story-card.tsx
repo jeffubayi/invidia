@@ -58,7 +58,7 @@ const StoryCard = (stories: StoryProps) => {
             handleChange,
             handleBlur,
             handleSubmit,
-            isSubmitting,
+            dirty,
           }) => (
             <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
               <Modal.Header>View note : {id}</Modal.Header>
@@ -89,7 +89,7 @@ const StoryCard = (stories: StoryProps) => {
                 />
               </Modal.Body>
               <Modal.Footer>
-                <Button type="submit" disabled={isSubmitting}>
+                <Button type="submit" disabled={!dirty}>
                   Update
                 </Button>
                 <Button

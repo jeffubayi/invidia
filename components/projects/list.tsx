@@ -24,8 +24,21 @@ import useSWR from "swr";
 import Skeleton from "../skeleton";
 
 const ProjectTable = ({ close }: { close: any }) => {
-  const { data, error } = useSWR("/api/projects", fetcher);
   const [showModal, setShowModal] = React.useState(false);
+  const [projects, setProjects] = React.useState<ProjectProp[]>();
+  const user_id =
+    typeof window !== "undefined" && sessionStorage.getItem("user_id");
+
+  React.useEffect(() => {
+    (async function getProjects() {
+      let { data: projects, error } = await supabase
+        .from("projects")
+        .select("*")
+        .eq("user_id", user_id);
+      if (error) toast.error("Error loading");
+      else setProjects(projects);
+    })();
+  }, [projects, user_id]);
   return (
     <>
       <Table hoverable={true}>
@@ -37,8 +50,8 @@ const ProjectTable = ({ close }: { close: any }) => {
           <Table.HeadCell>Due Date</Table.HeadCell>
         </Table.Head>
         <Table.Body className="divide-y" onClick={() => setShowModal(true)}>
-          {data ? (
-            data.data?.map(
+          {projects ? (
+            projects?.map(
               ({
                 title,
                 id,
@@ -127,13 +140,8 @@ const ProjectTable = ({ close }: { close: any }) => {
                         </div>
                       </Modal.Body>
                       <Modal.Footer>
-                        <Button onClick={close}>
-                          Update project
-                        </Button>
-                        <Button
-                          color="gray"
-                          onClick={close}
-                        >
+                        <Button onClick={close}>Update project</Button>
+                        <Button color="gray" onClick={close}>
                           Decline
                         </Button>
                       </Modal.Footer>

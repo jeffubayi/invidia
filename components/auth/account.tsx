@@ -61,7 +61,7 @@ export default function Account() {
     try {
       setLoading(true);
       const user = supabase.auth.user();
-
+  
       const updates = {
         id: user?.id,
         username,
@@ -69,10 +69,7 @@ export default function Account() {
         avatar_url,
         updated_at: new Date(),
       };
-
-      let { error } = await supabase.from("profiles").upsert(updates, {
-        returning: "minimal", // Don't return the value after inserting
-      });
+      let { error } = await supabase.from("profiles").upsert(updates);
 
       if (error) {
         throw error;

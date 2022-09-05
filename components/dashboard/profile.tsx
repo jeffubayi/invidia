@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "../../utils/supabaseClient";
 import { FcBullish, FcFolder, FcPlanner, FcAlarmClock } from "react-icons/fc";
 import {
-  HiInbox,
+  HiOutlineLogout,
   HiOutlineCog,
   HiOutlineExclamationCircle,
 } from "react-icons/hi";
@@ -49,15 +49,22 @@ const ProfileCard = () => {
     getProfile();
   }, [session]);
 
+  const logout = () => {
+    supabase.auth.signOut();
+    router.push(`/`);
+    typeof window !== "undefined" && sessionStorage.clear()
+  };
+
   async function getProfile() {
     try {
       setLoading(true);
-      const user = supabase.auth.user();
+      const user_id =
+      typeof window !== "undefined" && sessionStorage.getItem("user_id");
 
       let { data, error, status } = await supabase
         .from("profiles")
         .select(`username, website, avatar_url`)
-        .eq("id", user?.id)
+        .eq("id", user_id)
         .single();
       console.log(`profile`, data);
 
@@ -89,11 +96,11 @@ const ProfileCard = () => {
             img={
               avatar_url
                 ? `https://aaepbxpivppmvuaemajn.supabase.co/storage/v1/object/public/avatars/${avatar_url}`
-                : "https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQ_4BYCgnsCVPWrJ6dy_-7p07lmyH8UH7Suw&usqp=CAU"
             }
             alt="Admin user"
           />
-          <h5 className="mb-1 text-lg font-medium text-gray-900 dark:text-white">
+          <h5 className="m-1 text-lg font-medium text-gray-900 dark:text-white">
             {username}
           </h5>
           <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -158,9 +165,18 @@ const ProfileCard = () => {
               <span className="ml-3 text-sm flex-1 whitespace-nowrap">
                 Notes
               </span>
+              <span className="ml-3 inline-flex items-center justify-center rounded bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-500 dark:bg-gray-700 dark:text-gray-400">
+              {noteCount}
+              </span>
             </a>
           </li>
         </ul>
+        <div className="mt-2 flex justify:center">
+            <Button size="xs" color="failure" onClick={logout}>
+              <HiOutlineLogout className="mr-1" />
+              Logout
+            </Button>
+          </div>
       </Card>
       {showPomodoro && (
         <Modal
