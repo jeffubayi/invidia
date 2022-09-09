@@ -9,13 +9,19 @@ import { GoMarkGithub } from "react-icons/go";
 const Signin = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   const handleLogin = async (email: string) => {
+    console.log("user1",email,password)
     try {
       setLoading(true);
-      const { error } = await supabase.auth.signIn({ email });
+      const { user, session, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
       if (error) throw error;
-      toast.success("Check your email for the login link!");
+      console.log("user1",error)
+      toast.error(`${error}`);
     } catch (error) {
       error instanceof Error && alert(error.message);
     } finally {
@@ -38,7 +44,7 @@ const Signin = () => {
             <main className="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
               <div className="w-full">
                 <h1 className="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
-                  Sign in via magic link
+                  Sign in
                 </h1>
                 <form
                   className="flex flex-col gap-4"
@@ -59,9 +65,21 @@ const Signin = () => {
                     required={true}
                     disabled={loading}
                   />
+                  <div className=" block">
+                    <Label htmlFor="email1" value="Password" />
+                  </div>
+                  <TextInput
+                    id="email1"
+                    type="password"
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required={true}
+                    disabled={loading}
+                  />
 
                   <Button type="submit">
-                    {loading ? "Loading" : "Send magic link"}
+                    {loading ? "Loading" : "Log in"}
                   </Button>
                 </form>
                 <hr className="my-8" />
