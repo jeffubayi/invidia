@@ -1,9 +1,19 @@
 import { Button, Timeline } from "flowbite-react";
-import { HiOutlineTag} from "react-icons/hi";
+import { HiOutlineTag } from "react-icons/hi";
 import { useRouter } from "next/router";
+import axios from "axios";
+import { useState } from "react";
 
 const TimelineArea = () => {
   const router = useRouter();
+  const [quotes, setQuotes] = useState();
+  const fetchQuotes = () => {
+    axios.get("https://type.fit/api/quotes").then((res) => {
+      const item = res.data[Math.floor(Math.random() * res.data?.length)];
+      setQuotes(item);
+    });
+  };
+  fetchQuotes();
 
   return (
     <div className="m-4">
@@ -22,11 +32,7 @@ const TimelineArea = () => {
         </Timeline.Item>
       </Timeline>
       <div className="flex justify-center ">
-        <Button
-          size="xs"
-          color="gray"
-          onClick={() => router.push("/notifications")}
-        >
+        <Button size="xs" color="gray" onClick={() => router.push("/quotes")}>
           Show more quotes
         </Button>
       </div>

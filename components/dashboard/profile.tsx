@@ -50,9 +50,9 @@ const ProfileCard = () => {
   }, [session]);
 
   const logout = () => {
+    typeof window !== "undefined" && sessionStorage.clear()
     supabase.auth.signOut();
     router.push(`/`);
-    typeof window !== "undefined" && sessionStorage.clear()
   };
 
   async function getProfile() {
@@ -155,7 +155,7 @@ const ProfileCard = () => {
             </a>
           </li>
 
-          <li onClick={() => router.push("/notes")}>
+          <li onClick={() => router.push("/quotes")}>
             <a
               href="#"
               className="group flex items-center rounded-lg bg-gray-100 p-3 text-base font-bold text-gray-900 hover:bg-gray-100 hover:shadow dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500"
@@ -163,10 +163,7 @@ const ProfileCard = () => {
               <FcFolder />
 
               <span className="ml-3 text-sm flex-1 whitespace-nowrap">
-                Notes
-              </span>
-              <span className="ml-3 inline-flex items-center justify-center rounded bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-500 dark:bg-gray-700 dark:text-gray-400">
-              {noteCount}
+                Quotes
               </span>
             </a>
           </li>

@@ -9,14 +9,18 @@ import {
   Label,
   Textarea,
 } from "flowbite-react";
-import { HiClock } from "react-icons/hi";
+import { HiClock,HiXCircle } from "react-icons/hi";
 import { ProjectProp } from "../../utils";
+import { supabase } from "../../utils/supabaseClient";
 
 const DashboardProjects = (projects: ProjectProp) => {
   const { title, id, description, created_at, statuses, completed, assigned } =
     projects;
   const [showModal, setShowModal] = React.useState(false);
 
+  const deleteProject = async() => { 
+    await supabase.from("projects").delete().eq("id", id);
+  }
   return (
     <div className="py-1 ">
       <Card onClick={() => setShowModal(true)}>
@@ -88,10 +92,20 @@ const DashboardProjects = (projects: ProjectProp) => {
                 <Checkbox id="remember" checked={completed} />
                 <Label htmlFor="remember">Completed</Label>
               </div>
-              <Badge color="gray" icon={HiClock}>
+              <Badge color="gray" icon={HiClock} >
                 {new Date(created_at).toLocaleDateString()}
               </Badge>
             </div>
+            <div className="inline-flex">
+                    <HiXCircle
+                      className="text-gray-500 hover:text-red-500"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        deleteProject();
+                      }}
+                    />
+                  </div>
           </div>
         </Modal.Body>
         <Modal.Footer>
