@@ -26,7 +26,7 @@ const AddNewTodo: React.FC<IAddItem> = ({ todo, setTodo, onAddItem }) => {
           id="todo"
           name="todo"
           placeholder="Add new project"
-          className="w-full rounded-md border-gray m-2 px-4 bg-transparent text-white focus-within:outline-none focus-visible:outline-none focus-within:bg-transparent"
+          className="w-full rounded-md border-gray m-2 px-4 bg-transparent text-gray dark:text-white focus-within:outline-none focus-visible:outline-none focus-within:bg-transparent"
           onChange={(e) => setTodo(e.target.value)}
           ref={textRef}
         />
