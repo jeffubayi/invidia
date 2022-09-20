@@ -114,7 +114,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-
+{/* 
       <section className="bg-gray-100 dark:bg-gray-900">
         <div className="items-center max-w-screen-xl px-4 py-8 mx-auto lg:grid lg:grid-cols-4 lg:gap-16 xl:gap-24 lg:py-24 lg:px-6">
           <div className="col-span-2 mb-8">
@@ -241,7 +241,7 @@ const Home = () => {
             </figcaption>
           </figure>
         </div>
-      </section>
+      </section> */}
       <footer className="mt-10">
         <div className="text-center">
           <a
