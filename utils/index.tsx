@@ -11,10 +11,16 @@ export interface StoryProps {
   created_at?: number;
 }
 
+export interface Todo {
+  id: number;
+  todo: string;
+  isDone: boolean;
+}
+
 export interface ProjectProp {
-  title: string;
+  title?: string;
   id: number | string;
-  description: string;
+  description?: string;
   created_at?: number;
   assigned?: string;
   completed: boolean;
