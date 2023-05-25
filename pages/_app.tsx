@@ -1,61 +1,32 @@
-import "../styles/globals.css";
-import Layout from "../components/layout";
-import { Flowbite, Spinner } from "flowbite-react";
-import { AppProps } from "next/app";
-import { Suspense } from "react";
+import '../styles/globals.css';
+import { SessionContextProvider, Session } from '@supabase/auth-helpers-react';
+import { AppProps } from 'next/app';
 import { Toaster } from "react-hot-toast";
-import { supabase } from "../utils/supabaseClient";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { theme } from "../styles";
-import { Session } from "@supabase/gotrue-js/src/lib/types";
+import { Provider } from "react-redux";
 
-function MyApp({ Component, pageProps }: AppProps) {
-  const router = useRouter();
-  const user = supabase.auth.user();
-  const [session, setSession] = useState<Session | null>();
-  useEffect(() => {
-    setSession(supabase.auth.session());
+import { supabase } from "../utility/supabaseClient";
+import { store } from "../redux/store";
+import Layout from '../components/layout';
 
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-  }, []);
-
-  // @TODO add route protection for /signin and /signup
-  useEffect(() => {
-    if (user) {
-      if (router.pathname === "/") {
-        router.push("/dashboard");
-      }
-      console.log("usee",user)
-      session && (typeof window !== "undefined") && sessionStorage.setItem("user_id", user.id);
-      session && (typeof window !== "undefined") && sessionStorage.setItem("loggedIn", session.user.email);
-      
-    }
-  }, [router.pathname, user, router, ]);
-
-  return (
-    <Suspense
-      fallback={
-        <div className="flex items-center justify-center">
-          <Spinner size="lg" /> Loading...
-        </div>
-      }
-    >
-      <Flowbite theme={{ theme }}>
-        <Layout>
-          <Component {...pageProps} />
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              duration: 5000,
-            }}
-          />
-        </Layout>
-      </Flowbite>
-    </Suspense>
-  );
+interface MyAppProps extends AppProps {
+  initialSession: Session;
 }
 
-export default MyApp;
+const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
+  const { Component, pageProps, initialSession, } = props;
+
+  return (
+    <Provider store={store}>
+      <SessionContextProvider
+        supabaseClient={supabase}
+        initialSession={initialSession}
+      >
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+        <Toaster/>
+      </SessionContextProvider>
+    </Provider>
+  )
+}
+export default MyApp

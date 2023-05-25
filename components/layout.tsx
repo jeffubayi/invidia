@@ -1,35 +1,51 @@
-import Head from "next/head";
-import AppBar from "./appbar";
-import LandingAppBar from "./bottom-nav";
+import { createTheme,ThemeProvider } from "@mui/material";
+import { Box } from "@mui/material";
+import Container from '@mui/material/Container';
+import { useState, useMemo } from "react";
+import { PaletteMode } from "@mui/material";
+import {  useSelector, } from "react-redux";
 import { useRouter } from "next/router";
-import { Footer } from "flowbite-react";
+import Head from "next/head";
+
+import Navbar from './navbar';
+import { getDesignTokens } from "../styles/theme";
+
 interface Props {
-  title?: string;
   children: React.ReactNode;
 }
 
-const Layout = ({ title, children }: Props) => {
+interface RootState {
+    theme: {
+      darkMode:boolean
+    };
+}
+
+
+export default function Layout({ children }: Props) {
+  const [mode, setMode] = useState<PaletteMode>("light");
   const router = useRouter();
-  const isLayoutRequired =
-    (typeof window !== "undefined" && router.pathname === "/") ;
+  const currentRoute:string = router.pathname;
+  const colorMode:Boolean = useSelector((state: RootState) => state.theme.darkMode);
+  useMemo(() => {
+    setMode((prevMode: PaletteMode) =>
+      prevMode === "light" ? "dark" : "light"
+    );
+  }, [colorMode]);
+
+
+  // Update the theme only if the mode changes
+  const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <Head>
-        <title className="p-1">
-          {router?.pathname === "/"
-            ? "Invidia"
-            : `${router?.pathname.slice(1)} | invidia`}
-        </title>
+        <title>Mtaani - affordable and convenient collection points</title>
       </Head>
-
-      <body className=" bg-gray-100 dark:bg-gray-900 ">
-        {isLayoutRequired ? <LandingAppBar /> : <AppBar />}
-        <main className=" mx-auto max-w-screen-xl  pb-10  ">
-          <div className="p-6">{children}</div>
-        </main>
-      </body>
-    </>
+      {currentRoute !== "/signin" && <Navbar />}
+      <Box component="main">
+        <Container disableGutters maxWidth={currentRoute == "/signin" ? "xl" : "md"} component="main">
+          {children}
+        </Container>
+      </Box>
+    </ThemeProvider>
   );
-};
-
-export default Layout;
+}
